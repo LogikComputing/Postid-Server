@@ -4,6 +4,8 @@ Rails.application.routes.draw do
   namespace :api do
     namespace :v1 do
       get '/', to: 'api#index'
+      get 'login_or_register_user', to: 'api#login_or_register_user'
+      get 'login_with_token', to: 'api#login_with_token'
     end
   end
 
