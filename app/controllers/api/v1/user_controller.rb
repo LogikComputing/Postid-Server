@@ -39,9 +39,24 @@ class Api::V1::UserController < Api::V1::ApiController
     render json: {status: :ok, message: 'token login success', user: user}, status: :ok
   end
 
+  def update_phone_number
+    authenticate_request
+    update_phone_number_params
+
+    @user.update_attributes(phone_number: params[:user][:phone_number])
+    @user.update_ip(request)
+
+    render json: {status: :ok, message: 'Update phone success', user: @user}, status: :created
+
+  end
+
   private
   def login_params
     params.require(:user).permit(:first_name, :last_name, :email, :password, :username)
+  end
+
+  def update_phone_number_params
+    params.require(:user).permit(:token, :phone_number)
   end
 
 end

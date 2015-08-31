@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150822032859) do
+ActiveRecord::Schema.define(version: 20150831161749) do
 
   create_table "users", force: :cascade do |t|
     t.string   "first_name",                      null: false
@@ -19,13 +19,14 @@ ActiveRecord::Schema.define(version: 20150822032859) do
     t.string   "username",                        null: false
     t.string   "email",                           null: false
     t.string   "password_hash",                   null: false
-    t.string   "token",                           null: false
+    t.string   "token",           default: ""
     t.integer  "check_ins",       default: 1
     t.integer  "posts_created",   default: 1
     t.string   "last_ip_address", default: ""
     t.boolean  "admin",           default: false
     t.datetime "created_at",                      null: false
     t.datetime "updated_at",                      null: false
+    t.string   "phone_number",    default: ""
   end
 
 end
