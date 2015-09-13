@@ -6,6 +6,7 @@ Rails.application.routes.draw do
       get '/', to: 'api#index'
       get 'login_or_register_user', to: 'user#login_or_register_user'
       get 'login_with_token', to: 'user#login_with_token'
+      get 'search_for_friends', to: 'user#search_for_friends'
       post 'update_phone_number', to: 'user#update_phone_number'
     end
   end

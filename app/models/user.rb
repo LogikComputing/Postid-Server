@@ -16,11 +16,16 @@
 #  created_at      :datetime         not null
 #  updated_at      :datetime         not null
 #  phone_number    :string           default("")
+#  image_url       :string           default("")
 #
 
 class User < ActiveRecord::Base
   include BCrypt
   before_create :reset_token
+  has_many :friendships
+  has_many :friends, :through => :friendships
+  has_many :inverse_friendships, :class_name => 'Friendship', :foreign_key => 'friend_id'
+  has_many :inverse_friends, :through => :inverse_friendships, :source => :user
 
   def password
     @password ||= Password.new(password_hash)
@@ -41,5 +46,15 @@ class User < ActiveRecord::Base
 
   def reset_token
     self.token = SecureRandom.uuid.gsub(/\-/,'')
+  end
+
+  def add_friend(friend_id)
+    @friendship = self.friendships.build(:friend_id => friend_id)
+    return @friendship.save
+  end
+
+  def remove_friend(friend_id)
+    @friendship = self.friendships.find(friend_id)
+    @friendship.destroy
   end
 end

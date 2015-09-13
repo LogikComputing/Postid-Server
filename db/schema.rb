@@ -11,7 +11,32 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150831161749) do
+ActiveRecord::Schema.define(version: 20150907194604) do
+
+  create_table "friendships", force: :cascade do |t|
+    t.integer  "user_id"
+    t.integer  "friend_id"
+    t.boolean  "confirmed"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  create_table "posts", force: :cascade do |t|
+    t.integer  "user_id",                            null: false
+    t.string   "image_url",                          null: false
+    t.integer  "view_count",         default: 0
+    t.integer  "heart_count",        default: 0
+    t.integer  "smirk_count",        default: 0
+    t.integer  "fire_count",         default: 0
+    t.string   "created_ip_address", default: ""
+    t.integer  "likes",              default: 0
+    t.integer  "likes_needed",       default: 0
+    t.boolean  "flagged",            default: false
+    t.boolean  "approved",           default: false
+    t.boolean  "deleted",            default: false
+    t.datetime "created_at",                         null: false
+    t.datetime "updated_at",                         null: false
+  end
 
   create_table "users", force: :cascade do |t|
     t.string   "first_name",                      null: false
@@ -27,6 +52,7 @@ ActiveRecord::Schema.define(version: 20150831161749) do
     t.datetime "created_at",                      null: false
     t.datetime "updated_at",                      null: false
     t.string   "phone_number",    default: ""
+    t.string   "image_url",       default: ""
   end
 
 end

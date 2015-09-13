@@ -46,8 +46,39 @@ class Api::V1::UserController < Api::V1::ApiController
     @user.update_attributes(phone_number: params[:user][:phone_number])
     @user.update_ip(request)
 
-    render json: {status: :ok, message: 'Update phone success', user: @user}, status: :created
+    render json: {status: :created, message: 'Update phone success', user: @user}, status: :created
 
+  end
+
+  def add_friend
+    authenticate_request
+    friendship_params
+
+    if @user.add_friend(params[:friend][:id])
+      render json: {status: :created, message: 'Friendship created', user: @user}, status: :created
+    else
+      render json: {status: :bad_request, message: 'Unable to create friendship', user: @user}, status: :bad_request
+    end
+  end
+
+  def remove_friend
+    authenticate_request
+    friendship_params
+
+    @user.remove_friend(params[:friend][:id])
+
+    render json: {status: :accepted, message: 'Friendship destroy sent', user: @user}, status: :accepted
+  end
+
+  def search_for_friends
+    authenticate_request
+    friend_search_params
+
+    #todo return friend status and remove token from response
+
+    query_string = params[:friend][:query]
+    search_results = User.where('username like ? OR email like ?', "%#{query_string}%", "%#{query_string}%").order(:username).limit(20)
+    render json: {status: :ok, message: 'Search complete', user: @user, search_results: search_results}, status: :ok
   end
 
   private
@@ -57,6 +88,14 @@ class Api::V1::UserController < Api::V1::ApiController
 
   def update_phone_number_params
     params.require(:user).permit(:token, :phone_number)
+  end
+
+  def friendship_params
+    params.require(:friend).permit(:id)
+  end
+
+  def friend_search_params
+    params.require(:friend).permit(:query)
   end
 
 end

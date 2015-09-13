@@ -16,6 +16,7 @@
 #  created_at      :datetime         not null
 #  updated_at      :datetime         not null
 #  phone_number    :string           default("")
+#  image_url       :string           default("")
 #
 
 require 'test_helper'
