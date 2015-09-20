@@ -21,6 +21,8 @@
 
 class User < ActiveRecord::Base
   include BCrypt
+  include Amistad::FriendModel
+
   before_create :reset_token
   has_many :friendships
   has_many :friends, :through => :friendships
@@ -48,13 +50,23 @@ class User < ActiveRecord::Base
     self.token = SecureRandom.uuid.gsub(/\-/,'')
   end
 
-  def add_friend(friend_id)
-    @friendship = self.friendships.build(:friend_id => friend_id)
-    return @friendship.save
-  end
 
-  def remove_friend(friend_id)
-    @friendship = self.friendships.find(friend_id)
-    @friendship.destroy
-  end
+  # def is_friends?(user)
+  #   return self.friends.exists?(user) || self.inverse_friends.exists?(user)
+  # end
+  #
+  # def is_pending_friend?(user)
+  #   return self
+  # end
+  #
+  # def add_friend(friend_id)
+  #   @friendship = self.friendships.build(:friend_id => friend_id)
+  #   return @friendship.save
+  # end
+  #
+  # def remove_friend(friend_id)
+  #   @friendship = self.friendships.find(friend_id)
+  #   @friendship.destroy
+  # end
+
 end

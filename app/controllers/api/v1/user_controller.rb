@@ -54,10 +54,23 @@ class Api::V1::UserController < Api::V1::ApiController
     authenticate_request
     friendship_params
 
-    if @user.add_friend(params[:friend][:id])
-      render json: {status: :created, message: 'Friendship created', user: @user}, status: :created
+    user_to_add = User.find(params[:friend][:id])
+    if @user.friends_with?(user_to_add)
+      # already friends
+      render json: {status: :bad_request, message: 'Already friends', user: @user}, status: :bad_request
     else
-      render json: {status: :bad_request, message: 'Unable to create friendship', user: @user}, status: :bad_request
+      if @user.invited?(user_to_add)
+        # already invited
+        render json: {status: :created, message: 'Already invited', pending: false, user: @user}, status: :bad_request
+      elsif @user.invited_by?(user_to_add)
+        # approve friendship
+        @user.approve(user_to_add)
+        render json: {status: :created, message: 'Friendship created', pending: false, user: @user}, status: :created
+      else
+        # send invitation
+        @user.invite(user_to_add)
+        render json: {status: :created, message: 'Friendship created', pending: true, user: @user}, status: :created
+      end
     end
   end
 
