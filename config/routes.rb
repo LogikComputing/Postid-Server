@@ -13,6 +13,8 @@ Rails.application.routes.draw do
       get 'friend_list', to: 'user#friend_list'
       get 'request_list', to: 'user#request_list'
       get 'pending_list', to: 'user#pending_list'
+
+      post 'make_post', to: 'post#make_post'
     end
   end
 
