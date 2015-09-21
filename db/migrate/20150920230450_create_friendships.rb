@@ -1,5 +1,6 @@
 class CreateFriendships < ActiveRecord::Migration
   def self.up
+    drop_table :friendships
     create_table :friendships do |t|
       t.integer :friendable_id
       t.integer :friend_id
