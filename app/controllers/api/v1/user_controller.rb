@@ -23,7 +23,7 @@ class Api::V1::UserController < Api::V1::ApiController
     user.add_checkin
     user.update_ip(request)
 
-    render json: {status: :ok, message: 'login success', user: user}, status: :ok
+    render json: {status: :ok, message: 'login success', user: user, friends: user.friend_state_ids}, status: :ok
   end
 
   def login_with_token
@@ -36,7 +36,7 @@ class Api::V1::UserController < Api::V1::ApiController
     user.add_checkin
     user.update_ip(request)
 
-    render json: {status: :ok, message: 'token login success', user: user}, status: :ok
+    render json: {status: :ok, message: 'token login success', user: user, friends: user.friend_state_ids}, status: :ok
   end
 
   def update_phone_number
@@ -50,24 +50,49 @@ class Api::V1::UserController < Api::V1::ApiController
 
   end
 
+  def friend_list
+    authenticate_request
+    @user.update_ip(request)
+
+    render json: {status: :ok, message: 'Friend list success', user: @user, friends: @user.friend_ids}, status: :ok
+  end
+
+  def request_list
+    authenticate_request
+    @user.update_ip(request)
+
+    render json: {status: :ok, message: 'Request list success', user: @user, requests: @user.request_ids}, status: :ok
+  end
+
+  def pending_list
+    authenticate_request
+    @user.update_ip(request)
+
+    render json: {status: :ok, message: 'Pending list success', user: @user, pending: @user.pending_ids}, status: :ok
+  end
+
   def add_friend
     authenticate_request
     friendship_params
 
     user_to_add = User.find(params[:friend][:id])
-    if @user.friends_with?(user_to_add)
+    if @user.friend_with?(user_to_add)
       # already friends
+      puts "already friends"
       render json: {status: :bad_request, message: 'Already friends', user: @user}, status: :bad_request
     else
       if @user.invited?(user_to_add)
         # already invited
-        render json: {status: :created, message: 'Already invited', pending: false, user: @user}, status: :bad_request
+        puts "already invited"
+        render json: {status: :bad_request, message: 'Already invited', pending: false, user: @user}, status: :bad_request
       elsif @user.invited_by?(user_to_add)
         # approve friendship
+        puts "approving friendship"
         @user.approve(user_to_add)
         render json: {status: :created, message: 'Friendship created', pending: false, user: @user}, status: :created
       else
         # send invitation
+        puts "sending invitation"
         @user.invite(user_to_add)
         render json: {status: :created, message: 'Friendship created', pending: true, user: @user}, status: :created
       end

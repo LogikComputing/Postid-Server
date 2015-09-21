@@ -1,6 +1,5 @@
 Rails.application.routes.draw do
 
-
   namespace :api do
     namespace :v1 do
       get '/', to: 'api#index'
@@ -8,11 +7,13 @@ Rails.application.routes.draw do
       get 'login_with_token', to: 'user#login_with_token'
       get 'search_for_friends', to: 'user#search_for_friends'
       post 'update_phone_number', to: 'user#update_phone_number'
+      post 'add_friend', to: 'user#add_friend'
+
+      get 'friend_list', to: 'user#friend_list'
+      get 'request_list', to: 'user#request_list'
+      get 'pending_list', to: 'user#pending_list'
     end
   end
-
-
-
 
   # The priority is based upon order of creation: first created -> highest priority.
   # See how all your routes lay out with "rake routes".

@@ -24,10 +24,6 @@ class User < ActiveRecord::Base
   include Amistad::FriendModel
 
   before_create :reset_token
-  has_many :friendships
-  has_many :friends, :through => :friendships
-  has_many :inverse_friendships, :class_name => 'Friendship', :foreign_key => 'friend_id'
-  has_many :inverse_friends, :through => :inverse_friendships, :source => :user
 
   def password
     @password ||= Password.new(password_hash)
@@ -48,6 +44,25 @@ class User < ActiveRecord::Base
 
   def reset_token
     self.token = SecureRandom.uuid.gsub(/\-/,'')
+  end
+
+  def friend_ids
+    tmp = self.friends
+    return tmp.map{|friend| friend.id}
+  end
+
+  def pending_ids
+    tmp = self.pending_invited_by
+    return tmp.map{|friend| friend.id}
+  end
+
+  def request_ids
+    tmp = self.pending_invited
+    return tmp.map{|friend| friend.id}
+  end
+
+  def friend_state_ids
+    return {'friends':self.friend_ids, 'pending':self.pending_ids, 'requests':self.request_ids}
   end
 
 
