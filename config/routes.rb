@@ -15,6 +15,7 @@ Rails.application.routes.draw do
       get 'pending_list', to: 'user#pending_list'
 
       post 'make_post', to: 'post#make_post'
+      get 'fetch_posts', to: 'post#fetch_posts'
     end
   end
 

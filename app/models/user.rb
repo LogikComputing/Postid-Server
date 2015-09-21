@@ -23,6 +23,8 @@ class User < ActiveRecord::Base
   include BCrypt
   include Amistad::FriendModel
 
+  has_and_belongs_to_many :posts
+
   before_create :reset_token
 
   def password
@@ -63,6 +65,10 @@ class User < ActiveRecord::Base
 
   def friend_state_ids
     return {'friends':self.friend_ids, 'pending':self.pending_ids, 'requests':self.request_ids}
+  end
+
+  def friend_count
+    return self.friends.count
   end
 
 

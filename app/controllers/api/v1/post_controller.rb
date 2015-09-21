@@ -6,6 +6,7 @@ class Api::V1::PostController < Api::V1::ApiController
 
     url_key = params[:post][:url_key]
     user_ids = params[:post][:user_id_array]
+    likes_needed = 0
 
     new_post = Post.create(user_id: @user.id, image_url: url_key, created_ip_address: request.remote_ip)
     if !new_post.save
@@ -13,12 +14,56 @@ class Api::V1::PostController < Api::V1::ApiController
              status: :precondition_failed and return
     end
 
+    user_ids.each do |id|
+      tmp_user = User.find(id)
+      if tmp_user.present?
+        friend_count = tmp_user.friend_count
+        if friend_count > likes_needed
+          likes_needed = friend_count
+        end
+
+        tmp_user.posts << new_post
+        tmp_user.save
+      end
+    end
+
+    new_post.update_attribute(:likes_needed, likes_needed)
+
+
     render json: {status: :created, message: 'Post made'}, status: :created
+  end
+
+  def fetch_posts
+    authenticate_request
+    fetch_posts_params
+
+    min_id = params[:post][:min_id]
+    relevant_posts = Array.new
+
+    @user.posts.select{|post| post.id > min_id}.each do |post|
+      relevant_posts.append(post)
+    end
+
+    @user.friends.each do |friend|
+      friend.posts.select{|post| post.id > min_id}.each do |post|
+        relevant_posts.append(post)
+      end
+    end
+
+    max_id = Post.last.id
+
+    render json: {status: :created, message: 'Posts fetched', posts: relevant_posts, max_id: max_id}, status: :created
+
+    # return max_id for post table
   end
 
   private
   def make_post_params
     params.require(:post).permit(:url_key, :user_id_array)
+  end
+
+  def fetch_posts_params
+    params.require(:post).permit(:min_id)
   end
 
 end

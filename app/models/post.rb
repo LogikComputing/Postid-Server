@@ -20,6 +20,7 @@
 #
 
 class Post < ActiveRecord::Base
+  has_and_belongs_to_many :users
 
   def add_view
     self.increment!(:view_count)
