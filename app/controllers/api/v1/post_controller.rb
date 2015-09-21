@@ -37,7 +37,7 @@ class Api::V1::PostController < Api::V1::ApiController
     authenticate_request
     fetch_posts_params
 
-    min_id = params[:post][:min_id]
+    min_id = params[:post][:min_id].to_i
     relevant_posts = Array.new
 
     @user.posts.select{|post| post.id > min_id}.each do |post|
@@ -52,7 +52,7 @@ class Api::V1::PostController < Api::V1::ApiController
 
     max_id = Post.last.id
 
-    render json: {status: :created, message: 'Posts fetched', posts: relevant_posts, max_id: max_id}, status: :created
+    render json: {status: :ok, message: 'Posts fetched', posts: relevant_posts, max_id: max_id}, status: :ok
 
     # return max_id for post table
   end
