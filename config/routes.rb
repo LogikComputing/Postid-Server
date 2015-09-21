@@ -8,6 +8,7 @@ Rails.application.routes.draw do
       get 'search_for_friends', to: 'user#search_for_friends'
       post 'update_phone_number', to: 'user#update_phone_number'
       post 'add_friend', to: 'user#add_friend'
+      get 'download_user', to: 'user#download_user'
 
       get 'friend_list', to: 'user#friend_list'
       get 'request_list', to: 'user#request_list'

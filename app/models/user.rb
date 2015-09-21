@@ -52,12 +52,12 @@ class User < ActiveRecord::Base
   end
 
   def pending_ids
-    tmp = self.pending_invited_by
+    tmp = self.pending_invited
     return tmp.map{|friend| friend.id}
   end
 
   def request_ids
-    tmp = self.pending_invited
+    tmp = self.pending_invited_by
     return tmp.map{|friend| friend.id}
   end
 

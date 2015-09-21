@@ -119,6 +119,20 @@ class Api::V1::UserController < Api::V1::ApiController
     render json: {status: :ok, message: 'Search complete', user: @user, search_results: search_results}, status: :ok
   end
 
+  def download_user
+    authenticate_request
+    download_user_params
+
+    #todo remove important stuff
+
+    to_download = User.find(params[:user][:id])
+    if to_download.present?
+      render json: {status: :ok, message: 'User downloaded', user: @user, downloaded_user:to_download}, status: :ok
+    else
+      render json: {status: :precondition_failed, message: 'User does not exist!'}, status: :precondition_failed
+    end
+  end
+
   private
   def login_params
     params.require(:user).permit(:first_name, :last_name, :email, :password, :username)
@@ -134,6 +148,10 @@ class Api::V1::UserController < Api::V1::ApiController
 
   def friend_search_params
     params.require(:friend).permit(:query)
+  end
+
+  def download_user_params
+    params.require(:user).permit(:id)
   end
 
 end
