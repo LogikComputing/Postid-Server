@@ -41,7 +41,7 @@ class Post < ActiveRecord::Base
   def add_like
     self.increment!(:likes)
 
-    if self.likes > self.likes_needed
+    if self.likes > (self.likes_needed / 2)
       self.update_attribute(:approved, true)
     end
   end

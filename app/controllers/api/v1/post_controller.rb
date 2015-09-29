@@ -57,6 +57,25 @@ class Api::V1::PostController < Api::V1::ApiController
     # return max_id for post table
   end
 
+  def like_post
+    authenticate_request
+    like_post_params
+
+    post_id = params[:post][:post_id]
+    post = Post.find(post_id)
+
+    if post.blank?
+        render json: {error: 'Unable to find post', messages: @user.errors.full_messages, status: :precondition_failed},
+          status: :precondition_failed and return
+    end
+
+    post.add_like()
+    post.save()
+
+    render json: {status: :created, message: 'Post liked', post:post}, status: :created
+
+  end
+
   private
   def make_post_params
     params.require(:post).permit(:url_key, :user_id_array)
@@ -64,6 +83,10 @@ class Api::V1::PostController < Api::V1::ApiController
 
   def fetch_posts_params
     params.require(:post).permit(:min_id)
+  end
+
+  def like_post_params
+    params.require(:post).permit(:post_id)
   end
 
 end
