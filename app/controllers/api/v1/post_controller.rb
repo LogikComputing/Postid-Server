@@ -76,6 +76,44 @@ class Api::V1::PostController < Api::V1::ApiController
 
   end
 
+  def comment_post
+    authenticate_request
+    comment_post_params
+
+    post_id = params[:post][:post_id]
+    comment_type = params[:post][:type]
+    increment_value = params[:post][:increment]
+
+    post = Post.find(post_id)
+
+    if post.blank?
+      render json: {error: 'Unable to find post', messages: @user.errors.full_messages, status: :precondition_failed},
+             status: :precondition_failed and return
+    end
+
+    if comment_type == 'HEART'
+      if increment_value > 0
+        post.add_heart
+      else
+        post.remove_heart
+      end
+    elsif comment_type == 'FIRE'
+      if increment_value > 0
+        post.add_fire
+      else
+        post.remove_fire
+      end
+    elsif comment_type == 'SMIRK'
+      if increment_value > 0
+        post.add_smirk
+      else
+        post.remove_smirk
+      end
+    end
+
+    render json: {status: :created, message: 'Post commented', post:post}, status: :created
+  end
+
   private
   def make_post_params
     params.require(:post).permit(:url_key, :user_id_array)
@@ -87,6 +125,10 @@ class Api::V1::PostController < Api::V1::ApiController
 
   def like_post_params
     params.require(:post).permit(:post_id)
+  end
+
+  def comment_post_params
+    params.require(:post).permit(:post_id, :type, :increment)
   end
 
 end

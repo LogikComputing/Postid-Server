@@ -17,6 +17,7 @@ Rails.application.routes.draw do
       post 'make_post', to: 'post#make_post'
       get 'fetch_posts', to: 'post#fetch_posts'
       post 'like_post', to: 'post#like_post'
+      post 'comment_post', to: 'post#comment_post'
     end
   end
 

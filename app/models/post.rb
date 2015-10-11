@@ -30,13 +30,27 @@ class Post < ActiveRecord::Base
     self.increment!(:heart_count)
   end
 
+  def remove_heart
+    self.decrement!(:heart_count)
+  end
+
   def add_smirk
     self.increment!(:smirk_count)
+  end
+
+  def remove_smirk
+    self.decrement!(:smirk_count)
   end
 
   def add_fire
     self.increment!(:fire_count)
   end
+
+  def remove_fire
+    self.decrement!(:fire_count)
+  end
+
+
 
   def add_like
     self.increment!(:likes)
