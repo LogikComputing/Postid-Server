@@ -7,8 +7,10 @@ class Api::V1::UserController < Api::V1::ApiController
     user = User.find_by(username: request_username)
 
     if !user.present?
+      puts 'No such user!'
+
       username = params[:user][:username]
-      fail NotAuthenticatedError.new(3) if username == 'nil'
+      fail NotAuthenticatedError.new(3) if username == 'nil' || params[:user][:is_login]
       user = User.create(login_params)
 
       if !user.save
@@ -16,6 +18,8 @@ class Api::V1::UserController < Api::V1::ApiController
                status: :precondition_failed and return
       end
     else
+      puts 'Validating user pass'
+      
       pass = params[:user][:password]
       fail NotAuthenticatedError.new(5) unless user.password == pass
     end
@@ -135,7 +139,7 @@ class Api::V1::UserController < Api::V1::ApiController
 
   private
   def login_params
-    params.require(:user).permit(:first_name, :last_name, :email, :password, :username)
+    params.require(:user).permit(:first_name, :last_name, :email, :password, :username, :is_login)
   end
 
   def update_phone_number_params
