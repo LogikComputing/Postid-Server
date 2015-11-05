@@ -22,6 +22,10 @@
 class Post < ActiveRecord::Base
   has_and_belongs_to_many :users
 
+  def as_json(options={})
+    super(:include => :users)
+  end
+
   def add_view
     self.increment!(:view_count)
   end

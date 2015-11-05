@@ -19,7 +19,7 @@ class Api::V1::UserController < Api::V1::ApiController
       end
     else
       puts 'Validating user pass'
-      
+
       pass = params[:user][:password]
       fail NotAuthenticatedError.new(5) unless user.password == pass
     end
