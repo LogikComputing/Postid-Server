@@ -24,6 +24,7 @@ class User < ActiveRecord::Base
   include Amistad::FriendModel
 
   has_and_belongs_to_many :posts
+  has_many :notifications
 
   before_create :reset_token
 
