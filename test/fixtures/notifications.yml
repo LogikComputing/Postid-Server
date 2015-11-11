@@ -2,15 +2,15 @@
 #
 # Table name: notifications
 #
-#  id         :integer          not null, primary key
-#  user_id    :integer
-#  from_id    :integer
-#  message    :string
-#  post_id    :integer
-#  type       :integer
-#  viewed     :boolean
-#  created_at :datetime         not null
-#  updated_at :datetime         not null
+#  id                :integer          not null, primary key
+#  user_id           :integer
+#  from_id           :integer
+#  message           :string
+#  post_id           :integer
+#  notification_type :integer
+#  viewed            :boolean
+#  created_at        :datetime         not null
+#  updated_at        :datetime         not null
 #
 
 # Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html

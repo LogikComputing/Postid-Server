@@ -5,7 +5,7 @@ class CreateNotifications < ActiveRecord::Migration
       t.integer :from_id
       t.string :message
       t.integer :post_id
-      t.integer :type
+      t.integer :notification_type
       t.boolean :viewed
 
       t.timestamps null: false

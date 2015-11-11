@@ -18,6 +18,9 @@ Rails.application.routes.draw do
       get 'fetch_posts', to: 'post#fetch_posts'
       post 'like_post', to: 'post#like_post'
       post 'comment_post', to: 'post#comment_post'
+
+      get 'fetch_notifications', to: 'notification#fetch_notifications'
+      post 'mark_notification_viewed', to: 'notification#mark_notification_viewed'
     end
   end
 

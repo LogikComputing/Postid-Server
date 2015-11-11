@@ -27,10 +27,10 @@ ActiveRecord::Schema.define(version: 20151111040050) do
     t.integer  "from_id"
     t.string   "message"
     t.integer  "post_id"
-    t.integer  "type"
+    t.integer  "notification_type"
     t.boolean  "viewed"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.datetime "created_at",        null: false
+    t.datetime "updated_at",        null: false
   end
 
   create_table "posts", force: :cascade do |t|
