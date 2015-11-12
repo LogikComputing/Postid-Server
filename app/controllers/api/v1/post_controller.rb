@@ -25,7 +25,13 @@ class Api::V1::PostController < Api::V1::ApiController
         tmp_user.posts << new_post
         tmp_user.save
       end
+
+      create_notification(id, @user.id, '_xUx_ postid a picture of you', new_post.id, Notification.POSTID_OF_YOU)
     end
+
+
+
+    # TODO notification for postid of you
 
     new_post.update_attribute(:likes_needed, likes_needed)
 

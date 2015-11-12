@@ -61,6 +61,9 @@ class Post < ActiveRecord::Base
 
     if self.likes > (self.likes_needed / 2)
       self.update_attribute(:approved, true)
+
+      # todo notification for postid of you
+      # todo notification of postid by you
     end
   end
 end

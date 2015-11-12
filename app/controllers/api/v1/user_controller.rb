@@ -79,6 +79,9 @@ class Api::V1::UserController < Api::V1::ApiController
     authenticate_request
     friendship_params
 
+    #todo add notification for friend request received
+    #todo add notification for friend request accepted
+
     user_to_add = User.find(params[:friend][:id])
     if @user.friend_with?(user_to_add)
       # already friends

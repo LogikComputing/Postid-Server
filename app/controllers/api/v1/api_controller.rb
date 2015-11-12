@@ -1,4 +1,6 @@
 class Api::V1::ApiController < ActionController::Base
+  include NotificationHelper
+
   respond_to :json
   before_filter :setup_globals
 

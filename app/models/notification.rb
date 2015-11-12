@@ -20,8 +20,11 @@ class Notification < ActiveRecord::Base
     self.viewed ||= false
   end
 
-  enum notification_type: [:postid_of_you, :profiled_for_other, :profiled_for_you,
-                           :friend_request_received, :friend_request_accepted]
+  @@POSTID_OF_YOU = 0
+  @@PROFILED_FOR_OTHER = 1
+  @@PROFILED_FOR_YOU = 2
+  @@FRIEND_REQUEST_RECEIVED = 3
+  @@FRIEND_REQUEST_ACCEPTED = 4
 
   def as_json(options={})
     options[:except] ||= []
@@ -32,5 +35,25 @@ class Notification < ActiveRecord::Base
 
   def mark_viewed
     self.update_attribute(:viewed, true)
+  end
+
+  def self.POSTID_OF_YOU
+    @@POSTID_OF_YOU
+  end
+
+  def self.PROFILED_FOR_OTHER
+    @@PROFILED_FOR_OTHER
+  end
+
+  def self.PROFILED_FOR_YOU
+    @@PROFILED_FOR_YOU
+  end
+
+  def self.FRIEND_REQUEST_RECEIVED
+    @@FRIEND_REQUEST_RECEIVED
+  end
+
+  def self.FRIEND_REQUEST_ACCEPTED
+    @@FRIEND_REQUEST_ACCEPTED
   end
 end
