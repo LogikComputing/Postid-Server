@@ -10,8 +10,11 @@ class Api::V1::UserController < Api::V1::ApiController
       puts 'No such user!'
 
       username = params[:user][:username]
-      fail NotAuthenticatedError.new(3) if username == 'nil' || params[:user][:is_login]
-      user = User.create(login_params)
+      is_login = params[:user][:is_login].to_i
+      fail NotAuthenticatedError.new(3) if username == 'nil' || !is_login == 1
+
+      params[:user].delete(:is_login)
+      user = User.create(create_user_params)
 
       if !user.save
         render json: {error: 'Unable to save new user', messages: @user.errors.full_messages, status: :precondition_failed},
@@ -74,7 +77,7 @@ class Api::V1::UserController < Api::V1::ApiController
 
     render json: {status: :ok, message: 'Pending list success', user: @user, pending: @user.pending_ids}, status: :ok
   end
-
+1
   def add_friend
     authenticate_request
     friendship_params
@@ -98,7 +101,7 @@ class Api::V1::UserController < Api::V1::ApiController
         @user.approve(user_to_add)
 
         #notify user that their friend request was accepted
-        create_notification(user_to_add, @user.id, '_xUx_and you are now friends', nil, Notification.FRIEND_REQUEST_ACCEPTED)
+        create_notification(user_to_add.id, @user.id, '_xUx_and you are now friends', nil, Notification.FRIEND_REQUEST_ACCEPTED)
 
         render json: {status: :created, message: 'Friendship created', pending: false, user: @user}, status: :created
       else
@@ -107,7 +110,7 @@ class Api::V1::UserController < Api::V1::ApiController
         @user.invite(user_to_add)
 
         # notify user of friend request
-        create_notification(user_to_add, @user.id, '_xUx_ has requested to be your friend', nil, Notification.FRIEND_REQUEST_RECEIVED)
+        create_notification(user_to_add.id, @user.id, '_xUx_ has requested to be your friend', nil, Notification.FRIEND_REQUEST_RECEIVED)
         render json: {status: :created, message: 'Friendship created', pending: true, user: @user}, status: :created
       end
     end
@@ -150,6 +153,10 @@ class Api::V1::UserController < Api::V1::ApiController
   private
   def login_params
     params.require(:user).permit(:first_name, :last_name, :email, :password, :username, :is_login)
+  end
+
+  def create_user_params
+    params.require(:user).permit(:first_name, :last_name, :email, :password, :username)
   end
 
   def update_phone_number_params

@@ -72,8 +72,6 @@ class Post < ActiveRecord::Base
         create_notification(user.id, self.user_id, '_xUx_ post of you has been profiled', self.id, Notification.PROFILED_FOR_YOU)
       end
 
-      create_notification(u, from, message, post, type)
-
     end
   end
 end
