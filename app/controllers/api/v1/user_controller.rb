@@ -96,11 +96,18 @@ class Api::V1::UserController < Api::V1::ApiController
         # approve friendship
         puts "approving friendship"
         @user.approve(user_to_add)
+
+        #notify user that their friend request was accepted
+        create_notification(user_to_add, @user.id, '_xUx_and you are now friends', nil, Notification.FRIEND_REQUEST_ACCEPTED)
+
         render json: {status: :created, message: 'Friendship created', pending: false, user: @user}, status: :created
       else
         # send invitation
         puts "sending invitation"
         @user.invite(user_to_add)
+
+        # notify user of friend request
+        create_notification(user_to_add, @user.id, '_xUx_ has requested to be your friend', nil, Notification.FRIEND_REQUEST_RECEIVED)
         render json: {status: :created, message: 'Friendship created', pending: true, user: @user}, status: :created
       end
     end

@@ -20,6 +20,8 @@
 #
 
 class Post < ActiveRecord::Base
+  include NotificationHelper
+
   has_and_belongs_to_many :users
 
   def as_json(options={})
@@ -62,8 +64,16 @@ class Post < ActiveRecord::Base
     if self.likes > (self.likes_needed / 2)
       self.update_attribute(:approved, true)
 
-      # todo notification for postid of you
-      # todo notification of postid by you
+      # Notify user that his post was postid
+      create_notification(self.user_id, users.first.id, 'Your post for _xUx_ has been profiled', self.id,  Notification.PROFILED_FOR_OTHER)
+
+      # Notify users that they were postid of
+      self.users.each do |user|
+        create_notification(user.id, self.user_id, '_xUx_ post of you has been profiled', self.id, Notification.PROFILED_FOR_YOU)
+      end
+
+      create_notification(u, from, message, post, type)
+
     end
   end
 end
