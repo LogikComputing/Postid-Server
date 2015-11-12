@@ -65,11 +65,12 @@ class Post < ActiveRecord::Base
       self.update_attribute(:approved, true)
 
       # Notify user that his post was postid
-      create_notification(self.user_id, users.first.id, 'Your post for _xUx_ has been profiled', self.id,  Notification.PROFILED_FOR_OTHER)
+      create_notification(self.user_id, users.first.id, "Your post for #{users.first.username} has been profiled", self.id,  Notification.PROFILED_FOR_OTHER)
 
       # Notify users that they were postid of
       self.users.each do |user|
-        create_notification(user.id, self.user_id, '_xUx_ post of you has been profiled', self.id, Notification.PROFILED_FOR_YOU)
+        poster = User.find(self.user_id)
+        create_notification(user.id, self.user_id, "#{poster.username} post of you has been profiled", self.id, Notification.PROFILED_FOR_YOU)
       end
 
     end

@@ -28,6 +28,10 @@ class User < ActiveRecord::Base
 
   before_create :reset_token
 
+  def name
+    "#{first_name} #{last_name}"
+  end
+
   def password
     @password ||= Password.new(password_hash)
   end
