@@ -6,6 +6,8 @@ Rails.application.routes.draw do
       get 'login_or_register_user', to: 'user#login_or_register_user'
       get 'login_with_token', to: 'user#login_with_token'
       get 'search_for_friends', to: 'user#search_for_friends'
+      get 'search_for_friends_with_numbers', to: 'user#search_for_friends_with_numbers'
+      
       post 'update_phone_number', to: 'user#update_phone_number'
       post 'add_friend', to: 'user#add_friend'
       get 'download_user', to: 'user#download_user'

@@ -136,6 +136,17 @@ class Api::V1::UserController < Api::V1::ApiController
     render json: {status: :ok, message: 'Search complete', user: @user, search_results: search_results}, status: :ok
   end
 
+  def search_for_friends_with_numbers
+    authenticate_request
+    search_for_friends_with_numbers_params
+
+    numbers = params[:phone_numbers][:numbers]
+
+    search_results = User.where(phone_number: numbers).order(:username)
+
+    render json: {status: :ok, message: 'Phone search complete', user: @user, search_results: search_results}, status: :ok
+  end
+
   def download_user
     authenticate_request
     download_user_params
@@ -169,6 +180,10 @@ class Api::V1::UserController < Api::V1::ApiController
 
   def friend_search_params
     params.require(:friend).permit(:query)
+  end
+
+  def search_for_friends_with_numbers_params
+    params.require(:phone_numbers).permit(:numbers)
   end
 
   def download_user_params
