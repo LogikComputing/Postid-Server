@@ -57,6 +57,17 @@ class Api::V1::UserController < Api::V1::ApiController
 
   end
 
+  def update_image_url
+    authenticate_request
+    update_image_url_params
+
+    @user.update_attributes(image_url: params[:user][:image_url])
+    @user.update_ip(request)
+
+    render json: {status: :created, message: 'Update image url success', user: @user}, status: :created
+
+  end
+
   def friend_list
     authenticate_request
     @user.update_ip(request)
@@ -172,6 +183,10 @@ class Api::V1::UserController < Api::V1::ApiController
 
   def update_phone_number_params
     params.require(:user).permit(:token, :phone_number)
+  end
+
+  def update_image_url_params
+    params.require(:user).permit(:token, :image_url)
   end
 
   def friendship_params
