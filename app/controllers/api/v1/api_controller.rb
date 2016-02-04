@@ -7,7 +7,7 @@ class Api::V1::ApiController < ActionController::Base
   def index
     respond_to do |format|
       format.json { render json: {api_ver: @api_version, status: :ok}, status: :ok }
-      format.html { render html: "<h2>Postid API Version #{@api_version}</h2>".html_safe, status: :ok }
+      format.html { render html: "<h2>Go@It API Version #{@api_version}</h2>".html_safe, status: :ok }
     end
   end
 
