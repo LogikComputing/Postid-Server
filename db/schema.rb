@@ -11,7 +11,12 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20151111040050) do
+ActiveRecord::Schema.define(version: 20160411224054) do
+
+  create_table "fire_users", force: :cascade do |t|
+    t.integer "user_id"
+    t.integer "post_id"
+  end
 
   create_table "friendships", force: :cascade do |t|
     t.integer "friendable_id"
@@ -21,6 +26,16 @@ ActiveRecord::Schema.define(version: 20151111040050) do
   end
 
   add_index "friendships", ["friendable_id", "friend_id"], name: "index_friendships_on_friendable_id_and_friend_id", unique: true
+
+  create_table "heart_users", force: :cascade do |t|
+    t.integer "user_id"
+    t.integer "post_id"
+  end
+
+  create_table "like_users", force: :cascade do |t|
+    t.integer "user_id"
+    t.integer "post_id"
+  end
 
   create_table "notifications", force: :cascade do |t|
     t.integer  "user_id"
@@ -51,6 +66,11 @@ ActiveRecord::Schema.define(version: 20151111040050) do
   end
 
   create_table "posts_users", force: :cascade do |t|
+    t.integer "user_id"
+    t.integer "post_id"
+  end
+
+  create_table "smirk_users", force: :cascade do |t|
     t.integer "user_id"
     t.integer "post_id"
   end

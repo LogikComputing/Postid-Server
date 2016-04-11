@@ -41,6 +41,7 @@ class Api::V1::PostController < Api::V1::ApiController
     fetch_posts_params
 
     min_id = params[:post][:min_id].to_i
+    min_id = 0
     relevant_posts = Array.new
 
     @user.posts.select{|post| post.id > min_id}.each do |post|
@@ -122,8 +123,14 @@ class Api::V1::PostController < Api::V1::ApiController
 
     if comment_type == 'HEART'
       if increment_value > 0
+        if not post.heart_users.include?(@user)
+          post.heart_users << @user
+        end
         post.add_heart
       else
+        if post.heart_users.include?(@user)
+          post.heart_users.delete(@user)
+        end
         post.remove_heart
       end
     elsif comment_type == 'FIRE'
