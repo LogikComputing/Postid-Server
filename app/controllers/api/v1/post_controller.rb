@@ -55,9 +55,35 @@ class Api::V1::PostController < Api::V1::ApiController
 
     max_id = Post.last.id
 
+    relevant_posts.sort_by! {|post| -post.id}
+
     render json: {status: :ok, message: 'Posts fetched', posts: relevant_posts, max_id: max_id}, status: :ok
 
     # return max_id for post table
+  end
+
+  def fetch_posts_for_user
+    authenticate_request
+    fetch_posts_for_user_params
+
+    user_id = params[:user_id]
+
+    relevant_posts = Array.new
+
+    @user.friends.each do |friend|
+      friend.posts.each do |post|
+        post.users.each do |user|
+          if user.id == @user.id
+            relevant_posts.append(post)
+          end
+        end
+      end
+    end
+
+    relevant_posts.sort_by! {|post| -post.id}
+
+    render json: {status: :ok, message: 'Posts fetched', posts: relevant_posts}, status: :ok
+
   end
 
   def like_post
@@ -124,6 +150,10 @@ class Api::V1::PostController < Api::V1::ApiController
 
   def fetch_posts_params
     params.require(:post).permit(:min_id)
+  end
+
+  def fetch_posts_for_user_params
+    params.require(:user_id)
   end
 
   def like_post_params

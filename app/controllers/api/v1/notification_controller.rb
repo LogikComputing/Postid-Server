@@ -24,6 +24,8 @@ class Api::V1::NotificationController < Api::V1::ApiController
 
     max_id = Notification.last.id
 
+    relevant_notifications.sort_by! {|notification| -notification.id}
+
     render json: {status: :ok, message: 'Notifications fetched', notifications: relevant_notifications, max_id: max_id}, status: :ok
 
     # return max_id for post table
