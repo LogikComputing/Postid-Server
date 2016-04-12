@@ -10,7 +10,7 @@
 #  smirk_count        :integer          default(0)
 #  fire_count         :integer          default(0)
 #  created_ip_address :string           default("")
-#  likes              :integer          default(0)
+#  like_count         :integer          default(0)
 #  likes_needed       :integer          default(0)
 #  flagged            :boolean          default(FALSE)
 #  approved           :boolean          default(FALSE)
@@ -31,7 +31,7 @@ class Post < ActiveRecord::Base
   has_many :likes
 
   def as_json(options={})
-    super(:include => :users)
+    super(:include => [:users, :hearts, :smirks, :fires, :likes])
   end
 
   def add_view
@@ -62,12 +62,10 @@ class Post < ActiveRecord::Base
     self.decrement!(:fire_count)
   end
 
-
-
   def add_like
-    self.increment!(:likes)
+    self.increment!(:like_count)
 
-    if self.likes > (self.likes_needed / 2)
+    if self.like_count > (self.likes_needed / 2)
       self.update_attribute(:approved, true)
 
       # Notify user that his post was postid

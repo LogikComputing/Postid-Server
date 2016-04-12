@@ -56,7 +56,7 @@ ActiveRecord::Schema.define(version: 20160411224054) do
     t.integer  "smirk_count",        default: 0
     t.integer  "fire_count",         default: 0
     t.string   "created_ip_address", default: ""
-    t.integer  "likes",              default: 0
+    t.integer  "like_count",         default: 0
     t.integer  "likes_needed",       default: 0
     t.boolean  "flagged",            default: false
     t.boolean  "approved",           default: false

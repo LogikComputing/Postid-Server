@@ -103,6 +103,12 @@ class Api::V1::PostController < Api::V1::ApiController
           status: :precondition_failed and return
     end
 
+    like = Like.where(user_id: @user.id).where(post_id: post.id)
+    if not like.present?
+      like = Like.create(post_id: post.id)
+      @user.likes << like
+    end
+
     post.add_like()
     post.save()
 
@@ -127,27 +133,53 @@ class Api::V1::PostController < Api::V1::ApiController
 
     if comment_type == 'HEART' 
       if increment_value > 0
-        heart = Heart.where(user_id: @user.id).where(post_id: post.id)
+        heart = Heart.where(user_id: @user.id).where(post_id: post.id).first
         if not heart.present?
-          heart = @user.hearts << Heart.create(post)
+          heart = Heart.create(post_id: post.id)
+          @user.hearts << heart
         end
 
         post.add_heart
       else
-        #TODO remove hearts
+        heart = Heart.where(user_id: @user.id).where(post_id: post.id).first
+        if heart.present?
+          heart.delete
+        end
 
         post.remove_heart
       end
     elsif comment_type == 'FIRE'
       if increment_value > 0
+        fire = Fire.where(user_id: @user.id).where(post_id: post.id).first
+        if not fire.present?
+          fire = Fire.create(post_id: post.id)
+          @user.fires << fire
+        end
+
         post.add_fire
       else
+        fire = Fire.where(user_id: @user.id).where(post_id: post.id).first
+        if fire.present?
+          fire.delete
+        end
+
         post.remove_fire
       end
     elsif comment_type == 'SMIRK'
       if increment_value > 0
+        smirk = Smirk.where(user_id: @user.id).where(post_id: post.id).first
+        if not smirk.present?
+          smirk = Smirk.create(post_id: post.id)
+          @user.smirks << smirk
+        end
+
         post.add_smirk
       else
+        smirk = Smirk.where(user_id: @user.id).where(post_id: post.id).first
+        if smirk.present?
+          smirk.delete
+        end
+
         post.remove_smirk
       end
     end
