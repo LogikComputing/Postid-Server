@@ -10,8 +10,8 @@ class Api::V1::UserController < Api::V1::ApiController
       puts 'No such user!'
 
       username = params[:user][:username]
-      is_login = params[:user][:is_login].to_i
-      fail NotAuthenticatedError.new(3) if username == 'nil' || !is_login == 1
+      is_login = params[:user][:is_login].to_i == 1
+      fail NotAuthenticatedError.new(3) if username == 'nil' || is_login
 
       params[:user].delete(:is_login)
       user = User.create(create_user_params)
