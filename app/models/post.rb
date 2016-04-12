@@ -24,10 +24,11 @@ class Post < ActiveRecord::Base
 
   has_and_belongs_to_many :users
 
-  has_and_belongs_to_many :heart_users, class_name: 'User'
-  has_and_belongs_to_many :smirk_users, class_name: 'User'
-  has_and_belongs_to_many :fire_users, class_name: 'User'
-  has_and_belongs_to_many :like_users, class_name: 'User'
+  has_many :hearts
+  has_many :smirks
+  has_many :fires
+
+  has_many :likes
 
   def as_json(options={})
     super(:include => :users)

@@ -26,11 +26,11 @@ class User < ActiveRecord::Base
   has_and_belongs_to_many :posts
   has_many :notifications
 
-  has_and_belongs_to_many :hearts, class_name: 'Post'
-  has_and_belongs_to_many :smirks, class_name: 'Post'
-  has_and_belongs_to_many :fires, class_name: 'Post'
+  has_many :hearts
+  has_many :smirks
+  has_many :fires
 
-  has_and_belongs_to_many :likes, class_name: 'Post'
+  has_many :likes
 
   before_create :reset_token
 

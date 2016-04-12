@@ -54,9 +54,11 @@ class Api::V1::PostController < Api::V1::ApiController
       end
     end
 
-    max_id = Post.last.id
+    max_id = Post.last ? Post.last.id : 0
 
-    relevant_posts.sort_by! {|post| -post.id}
+    if relevant_posts.size > 0
+      relevant_posts.sort_by! {|post| -post.id}
+    end
 
     render json: {status: :ok, message: 'Posts fetched', posts: relevant_posts, max_id: max_id}, status: :ok
 
@@ -81,7 +83,9 @@ class Api::V1::PostController < Api::V1::ApiController
       end
     end
 
-    relevant_posts.sort_by! {|post| -post.id}
+    if relevant_posts.size > 0
+      relevant_posts.sort_by! {|post| -post.id}
+    end
 
     render json: {status: :ok, message: 'Posts fetched', posts: relevant_posts}, status: :ok
 
@@ -121,16 +125,17 @@ class Api::V1::PostController < Api::V1::ApiController
              status: :precondition_failed and return
     end
 
-    if comment_type == 'HEART'
+    if comment_type == 'HEART' 
       if increment_value > 0
-        if not post.heart_users.include?(@user)
-          post.heart_users << @user
+        heart = Heart.where(user_id: @user.id).where(post_id: post.id)
+        if not heart.present?
+          heart = @user.hearts << Heart.create(post)
         end
+
         post.add_heart
       else
-        if post.heart_users.include?(@user)
-          post.heart_users.delete(@user)
-        end
+        #TODO remove hearts
+
         post.remove_heart
       end
     elsif comment_type == 'FIRE'

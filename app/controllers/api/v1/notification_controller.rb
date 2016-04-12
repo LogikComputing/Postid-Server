@@ -22,9 +22,11 @@ class Api::V1::NotificationController < Api::V1::ApiController
       relevant_notifications.append(notification)
     end
 
-    max_id = Notification.last.id
+    max_id = Notification.last ? Notification.last.id : 0
 
-    relevant_notifications.sort_by! {|notification| -notification.id}
+    if relevant_notifications.size > 0
+      relevant_notifications.sort_by! {|notification| -notification.id}
+    end
 
     render json: {status: :ok, message: 'Notifications fetched', notifications: relevant_notifications, max_id: max_id}, status: :ok
 

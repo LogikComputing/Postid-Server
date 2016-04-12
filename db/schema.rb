@@ -13,7 +13,7 @@
 
 ActiveRecord::Schema.define(version: 20160411224054) do
 
-  create_table "fire_users", force: :cascade do |t|
+  create_table "fires", force: :cascade do |t|
     t.integer "user_id"
     t.integer "post_id"
   end
@@ -27,12 +27,12 @@ ActiveRecord::Schema.define(version: 20160411224054) do
 
   add_index "friendships", ["friendable_id", "friend_id"], name: "index_friendships_on_friendable_id_and_friend_id", unique: true
 
-  create_table "heart_users", force: :cascade do |t|
+  create_table "hearts", force: :cascade do |t|
     t.integer "user_id"
     t.integer "post_id"
   end
 
-  create_table "like_users", force: :cascade do |t|
+  create_table "likes", force: :cascade do |t|
     t.integer "user_id"
     t.integer "post_id"
   end
@@ -70,7 +70,7 @@ ActiveRecord::Schema.define(version: 20160411224054) do
     t.integer "post_id"
   end
 
-  create_table "smirk_users", force: :cascade do |t|
+  create_table "smirks", force: :cascade do |t|
     t.integer "user_id"
     t.integer "post_id"
   end
